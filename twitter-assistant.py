@@ -52,6 +52,18 @@ class Bot():
     def MentionUser(self,username,message = None):
         self.api.update_status("@"+username + " " + message)
         
+    def HandleDirectMessage(self):
+        pass
+    
+    def HandleMentionAtMe(self):
+        pass
+    
+    def SendDirectMessage(self):
+        pass
+        
+    def BackupAccount(self):
+        pass
+        
     def AddAction(self,keyword=None,action=None,parameters=None):
         if action is None:
             raise Exception("doing nothing on no action seems redundant")
@@ -72,6 +84,8 @@ class Bot():
             for match in results:
                 for action in self.keywords[keyword]:
                     action(match.from_user,self.keywords[keyword][action])
+                    #pause for some random amount of time.
+                    sleep(random.randint(1, 100))
         #sleep for whatever the frequency is
         print "sleeping for "+str(frequency) + " seconds"
         sleep(frequency)
