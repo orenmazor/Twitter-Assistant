@@ -53,27 +53,39 @@ class Bot():
     def MentionUser(self,username,message = None):
         self.api.update_status("@"+username + " " + message)
         
-    def HandleDirectMessage(self):
-        pass
+    def HandleDirectMessage(self,username,message):
+        self.api.send_direct_message(username,message)
     
-    def HandleMentionAtMe(self):
-        pass
+    def HandleMentionAtMe(self,tweet,message):
+        self.api.update_status(message,in_reply_to_status_id=tweet.id)
     
-    def SendDirectMessage(self):
-        pass
+    def SendDirectMessage(self,username,message):
+        self.api.send_direct_message(username,message)
+        #what else?
+        
+    def HandleFollow(self,username):
+        user = self.api.get_user(username)
+        user.follow()
         
     def BackupAccount(self):
         account_backup = {}
         #todo: this wont work.
-        account_backup["username"] = self.api.me
-        account_backup["friends"] = self.api.friends
-        account_backup["lists"] = self.api.lists
+        account_backup["username"] = self.api.me().screen_name
+        account_backup["friends"] = self.api.friends_ids()
+        account_backup["followers"] = self.api.followers_ids()
+        account_backup["lists"] = self.api.lists_subscriptions()
         
         backupfile = open(account_backup["username"] + "_" + str(time.time())+ "_backup.json","w")
         json.dump(account_backup,backupfile)
         
     def RestoreAccount(self, old_account):
-        pass
+        #how do you set the screen name?
+        self.api.me().screen_name
+        for friend in old_account["friends"]:
+            self.api.get_user(friend).follow()
+            
+        for listname in old_account["lists"]:
+            self.api.get_list(listname).subscribe()
         
     def AddAction(self,keyword=None,action=None,parameters=None):
         if action is None:
@@ -126,6 +138,8 @@ class Bot():
             auth = tweepy.OAuthHandler(self.settings["twitter_consumer_key"], self.settings["twitter_consumer_secret"])
             auth.set_access_token(self.settings["twitter_request_token"], self.settings["twitter_request_secret"])
         self.api = tweepy.API(auth)
+        import pdb
+        pdb.set_trace()
         return True,"no error"
         
         
