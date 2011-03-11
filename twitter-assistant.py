@@ -30,6 +30,7 @@ from _collections import defaultdict
 from time import sleep
 import tweepy
 import json
+import time
 
 class Bot():
     """encapsulate all of the twitter wrangling in one class"""
@@ -62,6 +63,16 @@ class Bot():
         pass
         
     def BackupAccount(self):
+        account_backup = {}
+        #todo: this wont work.
+        account_backup["username"] = self.api.me
+        account_backup["friends"] = self.api.friends
+        account_backup["lists"] = self.api.lists
+        
+        backupfile = open(account_backup["username"] + "_" + str(time.time())+ "_backup.json","w")
+        json.dump(account_backup,backupfile)
+        
+    def RestoreAccount(self, old_account):
         pass
         
     def AddAction(self,keyword=None,action=None,parameters=None):
