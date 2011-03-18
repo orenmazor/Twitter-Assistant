@@ -1,0 +1,7 @@
+Usage:
+
+Find the line in main that looks like this:
+
+bot.AddAction(action_to_execute=bot.FollowUser,message_to_send_after_action=None,search_params={"q":"#winning"})
+
+You'll need to add as many of these as you'd like, with modified parameters, to achieve your required results. note that search_params maps to the twitter API search parameters.
